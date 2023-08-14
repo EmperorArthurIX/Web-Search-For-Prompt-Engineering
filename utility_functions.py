@@ -5,6 +5,9 @@ import requests
 import pandas as pd
 import trafilatura as traf
 import streamlit as st
+from trafilatura.settings import use_config
+newconfig = use_config()
+newconfig.set("DEFAULT", "EXTRACTION_TIMEOUT", "0")
 
 class BingWebSearchAPI():
     
