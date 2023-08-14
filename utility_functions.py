@@ -59,7 +59,7 @@ def get_text_contents(data: pd.DataFrame):
         try:
             texts.append(traf.extract(get_web_content(row)))
         except:
-            st.error("Trafilatura Multi-threading error")
+            st.error("Trafilatura Multi-threading error, run on localhost to avoid")
     return texts
     
 
