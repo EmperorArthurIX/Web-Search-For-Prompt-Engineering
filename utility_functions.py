@@ -56,7 +56,11 @@ def get_web_content(url: str):
 def get_text_contents(data: pd.DataFrame):
     texts = list()
     for row in data['URL'].values:
-        texts.append(traf.extract(get_web_content(row)))
+        try:
+            texts.append(traf.extract(get_web_content(row)))
+        except:
+            from trafilatura import html2txt
+            texts.append(html2txt(get_web_content(row)))
     return texts
     
 
