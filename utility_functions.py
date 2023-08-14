@@ -59,8 +59,7 @@ def get_text_contents(data: pd.DataFrame):
         try:
             texts.append(traf.extract(get_web_content(row)))
         except:
-            from trafilatura import html2txt
-            texts.append(html2txt(get_web_content(row)))
+            st.error(Trafilatura Multi-threading error")
     return texts
     
 
