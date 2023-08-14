@@ -6,15 +6,7 @@ st.set_page_config(page_title="Web Search for Prompt Engineering",
                    layout="centered")
 
 st.title("Web Search for Prompt Engineering")
-from utility_functions import BingWebSearchAPI, convert_to_selectable_df, get_selected_rows, get_text_contents
 
-st.set_page_config(page_title="Web Search for Prompt Engineering",
-                   layout="centered")
-
-st.title("Web Search for Prompt Engineering")
-
-with st.sidebar.expander(label="Disclaimer"):
-     st.caption("None of the data appearing on this app is claimed to be generated here, it is simply a tool to optimise search times for examples to give while prompt engineering")
 with st.sidebar.expander(label="Disclaimer"):
      st.caption("None of the data appearing on this app is claimed to be generated here, it is simply a tool to optimise search times for examples to give while prompt engineering")
 
