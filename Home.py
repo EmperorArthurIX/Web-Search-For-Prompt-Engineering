@@ -1,16 +1,21 @@
 import streamlit as st
-from utility_functions import BingWebSearchAPI
+import pandas as pd
+from utility_functions import BingWebSearchAPI, convert_to_selectable_df, get_selected_rows
 
 st.title("Web Search for Promt Engineering")
 
 search_query = st.sidebar.text_input(label="Enter your search query")
-api_key = st.sidebar.text_input(label="Search Engine Service API Key", type='password', help="Eg. Bing Search API Key")
-api_endpoint = st.sidebar.text_input(label="Search API Endpoint URL", value="https://api.bing.microsoft.com/", help="URL from where we fetch search results")
-response = None
+api_key = st.sidebar.text_input(label="Search Engine Service API Key",
+                                type='password',
+                                help="Eg. Bing Search API Key")
+api_endpoint = st.sidebar.text_input(label="Search API Endpoint URL",
+                                     value="https://api.bing.microsoft.com/",
+                                     help="URL from where we fetch search results")
+
 if search_query:
-    # st.write(search_query)
-    # response = BingWebSearchAPI().get_search_results(search_query, api_key)
-    response = [{'content_snippet': 'Amity University Mumbai Aug 2020 - Present3 years 1 '
+    try:
+        # response = BingWebSearchAPI().get_search_results(search_query, api_key, api_endpoint)
+        response = [{'content_snippet': 'Amity University Mumbai Aug 2020 - Present3 years 1 '
                      'month Mumbai, Maharashtra, India Summer Intern Flex Jul '
                      '2022 - Aug 20222 months Mumbai, Maharashtra, India - '
                      'Implementation: Analysed weekly...',
@@ -81,5 +86,14 @@ if search_query:
   'name': 'Ishaan Pandita on LinkedIn: #gratitude #community #growth #learning '
           '# ...',
   'url': 'https://in.linkedin.com/posts/ishaan-sunita-pandita_a-journey-of-a-thousand-miles-begins-with-activity-6961699451937677312-qD3A'}]
-    st.dataframe(response)
-    st.selectbox(label="Selected Sources", options=response)
+        response = convert_to_selectable_df(response)
+        editing_df = st.data_editor(response,
+                                    hide_index=True,
+                                    disabled=response.columns[1:],
+                                    column_config={"Select":st.column_config.CheckboxColumn(required=True)}
+                                    )
+        selected_df = get_selected_rows(editing_df)
+        st.dataframe(selected_df['name'], hide_index=True)
+    except Exception as exp:
+        st.error(exp.message)
+    

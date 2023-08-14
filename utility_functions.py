@@ -2,6 +2,7 @@ import json
 import os 
 from pprint import pprint
 import requests
+import pandas as pd
 
 '''
 This sample makes a call to the Bing Web Search API with a query and returns relevant web search.
@@ -32,7 +33,16 @@ class BingWebSearchAPI():
         
         response = make_api_request(user_query)
         if response:
-            return [{'url' : page['url'], 'name' :  page['name'], 'content_snippet' : page['snippet']} for page in response['webPages']['value']]
+            return [{'URL' : page['url'], 'Title' :  page['name'], 'Content Snippet' : page['snippet']} for page in response['webPages']['value']]
+
+def convert_to_selectable_df(data: list):
+    data = pd.DataFrame(data)
+    data.insert(0, "Select", False)
+    return data
+
+def get_selected_rows(data: pd.DataFrame):
+    return data[data['Select'] == True]
+
 
 if __name__ == "__main__":
     search_query = input("Enter your search query: ")
