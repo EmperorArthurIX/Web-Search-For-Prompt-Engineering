@@ -47,7 +47,6 @@ def get_selected_rows(data: pd.DataFrame):
     return data[data['Select'] == True]
 
 
-@st.cache_data()
 def get_web_content(url: str):
     raw_data = traf.fetch_url(url=url)
     return raw_data
