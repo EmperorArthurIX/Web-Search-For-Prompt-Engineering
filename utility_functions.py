@@ -3,15 +3,13 @@ import os
 from pprint import pprint
 import requests
 import pandas as pd
-
-'''
-This sample makes a call to the Bing Web Search API with a query and returns relevant web search.
-Documentation: https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/overview
-'''
+import trafilatura as traf
+import streamlit as st
 
 class BingWebSearchAPI():
     
-    def get_search_results(self, user_query, api_key, api_endpoint="https://api.bing.microsoft.com/"):
+    @st.cache_resource()
+    def get_search_results(_self, user_query, api_key, api_endpoint="https://api.bing.microsoft.com/"):
 
         def make_api_request(query):
             mkt = 'en-IN'
@@ -35,15 +33,31 @@ class BingWebSearchAPI():
         if response:
             return [{'URL' : page['url'], 'Title' :  page['name'], 'Content Snippet' : page['snippet']} for page in response['webPages']['value']]
 
+
 def convert_to_selectable_df(data: list):
     data = pd.DataFrame(data)
     data.insert(0, "Select", False)
     return data
 
+
 def get_selected_rows(data: pd.DataFrame):
     return data[data['Select'] == True]
 
 
+@st.cache_data()
+def get_web_content(url: str):
+    raw_data = traf.fetch_url(url=url)
+    return raw_data
+
+
+def get_text_contents(data: pd.DataFrame):
+    texts = list()
+    for row in data['URL'].values:
+        texts.append(traf.extract(get_web_content(row)))
+    return texts
+    
+
 if __name__ == "__main__":
-    search_query = input("Enter your search query: ")
-    pprint(BingWebSearchAPI().get_search_results(user_query=search_query))
+    # search_query = input("Enter your search query: ")
+    # pprint(BingWebSearchAPI().get_search_results(user_query=search_query))
+    pprint(get_web_content("https://emperorarthurix.github.io/The-ISP/"))
